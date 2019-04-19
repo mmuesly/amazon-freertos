@@ -41,7 +41,6 @@
 #include "semphr.h"
 #include "iot_ble.h"
 #include "iot_mqtt.h"
-#include "iot_ble_mqtt_serialize.h"
 
 /**
  * @constantspage{iotblemqtt,ble library,MQTT proxy}
@@ -65,11 +64,10 @@
 /* @[define_ble_constants_mqtt_proxy] */
 #define IOT_BLE_MQTT_SERVICE_UUID               { 0x00, 0xFF, 0xC3, 0x4C, 0x04, 0x48, 0x02, 0xA0, 0xA9, 0x40, 0x2E, 0xD7, 0x6A, 0x16, 0xD7, 0xA9 }  /**< @brief Base UUID. */
 #define IOT_BLE_MQTT_CHAR_UUID_MASK             0xC3, 0x4C, 0x04, 0x48, 0x02, 0xA0, 0xA9, 0x40, 0x2E, 0xD7, 0x6A, 0x16, 0xD7, 0xA9                  /**< @brief UUID mask. */
-#define IOT_BLE_MQTT_CHAR_CONTROL_UUID          { 0x01, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief Control. */
-#define IOT_BLE_MQTT_CHAR_TX_MESG_UUID          { 0x02, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief TX buffer. */
-#define IOT_BLE_MQTT_CHAR_RX_MESG_UUID          { 0x03, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief RX buffer. */
-#define IOT_BLE_MQTT_CHAR_TX_LARGE_MESG_UUID    { 0x04, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief TX large buffer. */
-#define IOT_BLE_MQTT_CHAR_RX_LARGE_MESG_UUID    { 0x05, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief RX large buffer. */
+#define IOT_BLE_MQTT_CHAR_TX_MESG_UUID          { 0x01, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief TX buffer. */
+#define IOT_BLE_MQTT_CHAR_RX_MESG_UUID          { 0x02, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief RX buffer. */
+#define IOT_BLE_MQTT_CHAR_TX_LARGE_MESG_UUID    { 0x03, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief TX large buffer. */
+#define IOT_BLE_MQTT_CHAR_RX_LARGE_MESG_UUID    { 0x04, 0xFF, IOT_BLE_MQTT_CHAR_UUID_MASK }                                                         /**< @brief RX large buffer. */
 #define IOT_BLE_MQTT_CCFG_UUID                  ( 0x2902 )                                                                                          /**< @brief Client configuration. */
 /* @[define_ble_constants_mqtt_proxy] */
 
@@ -90,7 +88,6 @@
 typedef enum
 {
     IOT_BLE_MQTT_SERVICE,
-    IOT_BLE_MQTT_CHAR_CONTROL,             /*!< IOT_BLE_MQTT_Control Characteristic to enable/disable transferring data over MQTT service */
     IOT_BLE_MQTT_CHAR_TX_MESG,             /*!< IOT_BLE_MQTT_TXMessage Characteristic to send notification containing a message to MQTT broker */
     IOT_BLE_MQTT_CHAR_DESCR_TX_MESG,       /*!< IOT_BLE_MQTT_CHAR_DESCR_TX_MESG Characteristic descriptor */
     IOT_BLE_MQTT_CHAR_RX_MESG,             /*!< IOT_BLE_MQTT_RXMessage Characteristic to receive a message from MQTT broker */
@@ -136,8 +133,7 @@ typedef struct  IotBleMqttService
     BTService_t * pServicePtr;             /**< A pointer to the BLE GATT service. */
     uint16_t descrVal[ 2 ];                /**< A buffer for the value descriptor. */
     uint16_t BLEConnId;                    /**< The BLE connection ID. */
-    bool isInit;                           /**< A flag to indicate whether this connection is initialized. */
-    bool isEnabled;                        /**< A flag to indicate whether this connection is enbled. */
+    bool isInit;                           /**< A flag to indicate whether the service is initialized. */
 } IotBleMqttService_t;
 
 /**
